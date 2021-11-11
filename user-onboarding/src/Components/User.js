@@ -1,16 +1,19 @@
 import React from "react";
+import './user.css'
 
- function User ( {users} )  {
-     // <h2>{users.last_name}, {users.first_name} </h2>
-     // <img>{users.avatar}</img>
-     // <p>Email: {users.email}</p>
-     // <p>Password: {users.password}</p>
+function User(props) {
+    const {user} = props;
+    // <h2>{user.last_name}, {user.first_name} </h2>
+    // <img>{user.avatar}</img>
+    // <p>Email: {user.email}</p>
+    // <p>Password: {user.password}</p>
     return (
-        <div className='container'>
-
-            <h2>test</h2>
-
+        <div className='user'>
+            <h2>{user.last_name}, {user.first_name} </h2>
+            <img src={user.avatar}/>
+            <p>Email: {user.email}</p>
         </div>
     )
 }
+
 export default User;
