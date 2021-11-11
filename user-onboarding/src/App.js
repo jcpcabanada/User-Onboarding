@@ -32,10 +32,11 @@ const initialDisabled = true
 
 export default function App() {
 //States
-    const [users, setUsers] = useState([]) //array of user obj's
+    const [users, setUsers] = useState(initialUsers) //array of user obj's
     const [formValues, setFormValues] = useState(initialFormValues) //obj
     const [formErrors, setFormErrors] = useState(initialFormErrors) //obj
     const [disabled, setDisabled] = useState(initialDisabled) //boolean
+
 
 
     //Helpers
@@ -46,7 +47,7 @@ export default function App() {
             .then(res => {
                 setUsers(res.data.data);
                 // console.log(res.data.data)
-                // console.log(users)
+                console.log(users)
             })
             .catch(err => console.error(err))
     }, [])
@@ -65,6 +66,19 @@ export default function App() {
             })
     }
 
+    const validate = (name, value) => {
+        yup
+            .reach(schema, name)
+            .validate(value)
+            .then(() => setFormErrors({...formErrors, [name]: ''}))
+            .catch(err => setFormErrors({...formErrors, [name]: err.errors[0] }))
+    }
+
+    const change = (name, value) => {
+        validate(name, value);
+        setFormValues({ ...formErrors, [name]: value})
+    }
+
     const submit = () => {
         const newUser = {
             name: formValues.name.trim(),
@@ -73,10 +87,6 @@ export default function App() {
         }
         postNewUser(newUser);
     }
-
-    useEffect(() => {
-        getUsers()
-    }, [])
 
     useEffect(() => {
         schema.isValid(formValues).then(valid => setDisabled(!valid));
@@ -89,6 +99,16 @@ export default function App() {
             <header className="App-header">
                 <h1>Friends Online</h1>
             </header>
+            <Form
+                values={formValues}
+                change={change}
+                submit={submit}
+                errors={formErrors}
+                disabled={disabled}
+            />
+            {users.map(user => (
+                <User user={users} key={user.id} />
+            ))}
         </div>
     );
 }
