@@ -2,6 +2,9 @@ import React, {useEffect, useState} from 'react'
 import Users from "./Components/Users";
 import axios from "axios";
 import './App.css';
+import * as yup from 'yup';
+import schema from './validation/formSchema';
+import Form from "./Components/Form";
 
 const initialFormValues = {
     //Text Inputs
@@ -42,7 +45,7 @@ function App() {
             })
     }, [])
 
-        const postNewUser = (newFriend) => {
+    const postNewUser = (newFriend) => {
         axios
             .post('https://reqres.in/api/users', newFriend)
             .then(res => {
@@ -56,15 +59,48 @@ function App() {
             })
     }
 
+    const validate = (name, value) => {
+        yup
+            .reach(schema, name)
+            .validate(value)
+            .then(() => setFormErrors({...formErrors, [name]: ''}))
+            .catch(err => setFormErrors({...formErrors, [name]: err.errors[0]}))
+    }
 
+    const change = (name, value) => {
+        validate(name, value);
+        setFormValues({...formErrors, [name]: value})
+    }
 
+    const submit = () => {
+        const newUser = {
+            name: formValues.name.trim(),
+            email: formValues.email.trim(),
+            password: formValues.password.trim(),
+        }
+        postNewUser(newUser);
+    }
 
+    useEffect(() => {
+        schema.isValid(formValues).then(valid => setDisabled(!valid));
+    }, [formValues])
 
 
     return (
-        <div>
-            <h1>Friends Online</h1>
-            <Users users={users} />
+        <div className="page">
+            <div>
+                <Form
+                    values={formValues}
+                    change={change}
+                    submit={submit}
+                    errors={formErrors}
+                    disabled={disabled}
+                />
+            </div>
+            <div>
+                <h1>Friends Online</h1>
+                <Users users={users}/>
+            </div>
         </div>
     )
 }
