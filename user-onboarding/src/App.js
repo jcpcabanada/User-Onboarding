@@ -8,7 +8,8 @@ import Form from "./Components/Form";
 
 const initialFormValues = {
     //Text Inputs
-    name: '',
+    first_name: '',
+    last_name: '',
     email: '',
     password: '',
     //Checkbox
@@ -17,7 +18,8 @@ const initialFormValues = {
 
 const initialFormErrors = {
     //Text Inputs
-    name: '',
+    first_name: '',
+    last_name: '',
     email: '',
     password: '',
     //Checkbox
@@ -45,11 +47,13 @@ function App() {
             })
     }, [])
 
+
     const postNewUser = (newFriend) => {
         axios
             .post('https://reqres.in/api/users', newFriend)
             .then(res => {
-                setUsers([res.data.data, ...users]);
+                setUsers([newFriend, ...users]);
+                // console.log(res.data)
             })
             .catch(err => {
                 console.error(err);
@@ -58,6 +62,10 @@ function App() {
                 setFormValues(initialFormValues)
             })
     }
+
+    // useEffect(() => {
+    //     postNewUser(initialFormValues);
+    // },[])
 
     const validate = (name, value) => {
         yup
@@ -74,7 +82,8 @@ function App() {
 
     const submit = () => {
         const newUser = {
-            name: formValues.name.trim(),
+            first_name: formValues.first_name.trim(),
+            last_name: formValues.last_name.trim(),
             email: formValues.email.trim(),
             password: formValues.password.trim(),
         }
@@ -99,7 +108,7 @@ function App() {
             </div>
             <div>
                 <h1>Friends Online</h1>
-                <Users users={users}/>
+                <Users users={users} key={users.id}/>
             </div>
         </div>
     )

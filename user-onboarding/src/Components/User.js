@@ -10,7 +10,7 @@ function User(props) {
     return (
         <div className='user'>
             <h2>{user.last_name}, {user.first_name} </h2>
-            <img src={user.avatar}/>
+            <img src={user.avatar} alt={user.avatar}/>
             <p>Email: {user.email}</p>
         </div>
     )
