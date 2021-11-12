@@ -77,7 +77,7 @@ function App() {
 
     const change = (name, value) => {
         validate(name, value);
-        setFormValues({...formErrors, [name]: value})
+        setFormValues({...formValues, [name]: value})
     }
 
     const submit = () => {

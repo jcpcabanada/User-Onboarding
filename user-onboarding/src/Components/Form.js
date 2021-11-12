@@ -55,7 +55,7 @@ export default function Form(props) {
                         name='password'
                         type='password'
                     />
-                </label>
+                </label><br/>
                 <label>Terms of Service
                     <input
                         type="checkbox"
